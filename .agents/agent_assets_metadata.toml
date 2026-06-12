@@ -1,0 +1,32 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "rvVmpKRlhcc4MsbfUjq88"
+uri = "file://artifacts/jaquelines-flowers/public/hero.png"
+type = "image"
+title = "Hero vibrant sun-drenched flower shop"
+
+[[generated]]
+id = "DUD_ZmQ4WktDOh7v_rT6P"
+uri = "file://artifacts/jaquelines-flowers/public/about.png"
+type = "image"
+title = "Family flower shop working hands"
+
+[[generated]]
+id = "iv86PHpeeZEHiKGnXQzHA"
+uri = "file://artifacts/jaquelines-flowers/public/bouquet-1.png"
+type = "image"
+title = "Stunning white lilies bouquet"
+
+[[generated]]
+id = "2fv0Ou0jz6YaFUAboliK_"
+uri = "file://artifacts/jaquelines-flowers/public/bouquet-2.png"
+type = "image"
+title = "Romantic colorful mixed spring flowers"
+
+[[generated]]
+id = "b1p0cF76FxNulIVuH9bnp"
+uri = "file://artifacts/jaquelines-flowers/public/bouquet-3.png"
+type = "image"
+title = "Classic elegant red roses arrangement"

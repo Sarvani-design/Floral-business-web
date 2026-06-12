@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Jaquelines Flowers"
+version = "1.0.0"
+id = "artifacts/jaquelines-flowers"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22453
+
+[services.development]
+run = "pnpm --filter @workspace/jaquelines-flowers run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/jaquelines-flowers", "run", "build" ]
+publicDir = "artifacts/jaquelines-flowers/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22453"
+BASE_PATH = "/"
