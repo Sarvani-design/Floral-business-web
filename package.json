@@ -2,6 +2,7 @@
   "name": "workspace",
   "version": "0.0.0",
   "license": "MIT",
+  "packageManager": "pnpm@11.7.0",
   "scripts": {
     "preinstall": "node -e \"const ua=process.env.npm_config_user_agent||''; const fs=require('fs'); ['package-lock.json','yarn.lock'].forEach(f=>{try{fs.unlinkSync(f)}catch{}}); if(!ua.startsWith('pnpm/')){process.stderr.write('Use pnpm instead\\n');process.exit(1)}\"",
     "build": "pnpm run typecheck && pnpm -r --if-present run build",

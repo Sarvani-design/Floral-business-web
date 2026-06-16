@@ -3,18 +3,19 @@ import { Phone, MapPin, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Sliding pill toggle — EN left, ES right, glider slides between them
 function LangToggle({ light }: { light?: boolean }) {
-  const [lang, setLang] = React.useState<"en" | "es">(() => {
-    if (typeof document === "undefined") return "en";
-    return document.cookie.includes("googtrans=/en/es") ? "es" : "en";
+  const [isES, setIsES] = React.useState(() => {
+    if (typeof document === "undefined") return false;
+    return document.cookie.includes("googtrans=/en/es");
   });
 
-  const switchTo = (target: "en" | "es") => {
-    if (target === lang) return;
-    setLang(target);
+  const handleToggle = () => {
+    const next = !isES;
+    setIsES(next);
 
-    if (target === "es") {
-      // Retry until the Google Translate combo is available (loads async)
+    if (next) {
+      // Switch to Spanish — retry until goog-te-combo is ready
       const attempt = (tries = 0) => {
         const combo = document.querySelector<HTMLSelectElement>(".goog-te-combo");
         if (combo) {
@@ -26,42 +27,25 @@ function LangToggle({ light }: { light?: boolean }) {
       };
       attempt();
     } else {
-      // Clear the googtrans cookie and reload to restore original English
-      const clear = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-      document.cookie = clear;
-      document.cookie = clear + "; domain=." + location.hostname;
+      // Restore English — clear googtrans cookie and reload
+      const exp = "expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+      document.cookie = `googtrans=; ${exp}`;
+      document.cookie = `googtrans=; ${exp}; domain=.${location.hostname}`;
       window.location.reload();
     }
   };
 
-  const base = light
-    ? "bg-white/15 border-white/30"
-    : "bg-muted border-border";
-
   return (
-    <div
-      className={`lang-toggle ${base}`}
-      role="group"
-      aria-label="Language selector"
+    <button
+      className={`lang-switch${isES ? " lang-switch--es" : ""}${light ? " lang-switch--light" : ""}`}
+      onClick={handleToggle}
+      aria-label={isES ? "Cambiar a Inglés" : "Switch to Spanish"}
+      title={isES ? "Switch to English" : "Cambiar a Español"}
     >
-      <button
-        className={`lang-btn${lang === "en" ? " lang-btn--active" : ""}${light && lang !== "en" ? " lang-btn--light-inactive" : ""}`}
-        onClick={() => switchTo("en")}
-        aria-pressed={lang === "en"}
-        aria-label="Switch to English"
-      >
-        EN
-      </button>
-      <span className="lang-divider" aria-hidden="true" />
-      <button
-        className={`lang-btn${lang === "es" ? " lang-btn--active" : ""}${light && lang !== "es" ? " lang-btn--light-inactive" : ""}`}
-        onClick={() => switchTo("es")}
-        aria-pressed={lang === "es"}
-        aria-label="Cambiar a Español"
-      >
-        ES
-      </button>
-    </div>
+      <span className="lang-switch__glider" aria-hidden="true" />
+      <span className={`lang-switch__label${!isES ? " lang-switch__label--active" : ""}`}>EN</span>
+      <span className={`lang-switch__label${isES ? " lang-switch__label--active" : ""}`}>ES</span>
+    </button>
   );
 }
 
@@ -83,7 +67,6 @@ export function Navbar() {
     { name: "Contact", href: "#contact" },
   ];
 
-  // When transparent (over hero image) use light/white text; when glass use normal
   const textClass = isScrolled ? "text-foreground" : "text-white";
   const logoClass = isScrolled ? "text-primary" : "text-white";
 
@@ -93,7 +76,7 @@ export function Navbar() {
         isScrolled ? "glass-nav py-3" : "bg-black/20 backdrop-blur-sm py-5"
       }`}
     >
-      {/* Google Translate element: visually hidden but properly rendered so the script can init */}
+      {/* Hidden Google Translate init target — zero-size, stays in DOM for script */}
       <div
         id="google_translate_element"
         aria-hidden="true"

@@ -222,60 +222,71 @@ body {
   font-size: 0.75rem !important;
 }
 
-/* Custom EN | ES language toggle pill */
-.lang-toggle {
+/* ── Sliding EN / ES pill toggle ── */
+.lang-switch {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  background: hsl(30 20% 90%);
-  border: 1px solid hsl(30 20% 80%);
-  border-radius: 9999px;
-  padding: 3px;
-  gap: 0;
-}
-.lang-btn {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  line-height: 1;
-  padding: 5px 10px;
-  border-radius: 9999px;
+  justify-content: space-between;
+  width: 86px;
+  height: 38px;
+  background-color: hsl(30 20% 86%);
   border: none;
-  background: transparent;
-  color: hsl(24 10% 40%);
+  border-radius: 50px;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  min-height: 28px;
-  display: flex;
-  align-items: center;
-}
-.lang-btn:hover {
-  color: hsl(15 50% 45%);
-}
-.lang-btn--active {
-  background: hsl(15 50% 45%);
-  color: white;
-}
-.lang-btn--active:hover {
-  color: white;
-}
-/* White variant for use over hero image (transparent navbar) */
-.lang-btn--light-inactive {
-  color: rgba(255, 255, 255, 0.8);
-}
-.lang-btn--light-inactive:hover {
-  color: white;
-}
-.lang-divider {
-  width: 1px;
-  height: 14px;
-  background: hsl(30 20% 78%);
-  margin: 0 1px;
+  padding: 0;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.10), 0 2px 4px rgba(0,0,0,0.06);
+  overflow: hidden;
   flex-shrink: 0;
+  transition: background 0.3s ease;
 }
-/* Hide divider when one side is active (pill covers it) */
-.lang-btn--active + .lang-divider,
-.lang-divider + .lang-btn--active {
-  display: none;
+.lang-switch--light {
+  background-color: rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.12);
+}
+
+/* Sliding indicator */
+.lang-switch__glider {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 37px;
+  height: 30px;
+  background-color: hsl(15 50% 45%);
+  border-radius: 40px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.22);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+/* Move glider to ES side: (86 - 37 - 4) - 4 = 41px */
+.lang-switch--es .lang-switch__glider {
+  transform: translateX(41px);
+}
+
+/* Labels */
+.lang-switch__label {
+  flex: 1;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: hsl(24 10% 45%);
+  z-index: 2;
+  transition: color 0.3s ease;
+  user-select: none;
+  pointer-events: none;
+  line-height: 1;
+}
+.lang-switch--light .lang-switch__label {
+  color: rgba(255, 255, 255, 0.7);
+}
+.lang-switch__label--active {
+  color: #ffffff;
+}
+/* Focus ring */
+.lang-switch:focus-visible {
+  outline: 2px solid hsl(15 50% 45%);
+  outline-offset: 3px;
 }
 
 /* Phone call floating action button */
