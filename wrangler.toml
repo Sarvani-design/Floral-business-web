@@ -1,2 +1,5 @@
 name = "floral-business-web"
-pages_build_output_dir = "artifacts/jaquelines-flowers/dist/public"
+compatibility_date = "2026-06-16"
+
+[assets]
+directory = "./artifacts/jaquelines-flowers/dist/public"
