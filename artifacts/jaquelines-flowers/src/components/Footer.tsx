@@ -24,13 +24,11 @@ export function Footer() {
               A warm, living-color florist born from family love. We turn Los Angeles mornings into moments with stunningly fresh, handmade arrangements.
             </p>
             <div className="flex items-center gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-white">
-                <Instagram className="w-5 h-5" />
-                <span className="sr-only">Instagram</span>
+              <a href="https://www.instagram.com/jacquelinesflowershop/" target="_blank" rel="noopener noreferrer" aria-label="Follow Jaquelines Flowers on Instagram" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-white focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-secondary">
+                <Instagram className="w-5 h-5" aria-hidden="true" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-white">
-                <Facebook className="w-5 h-5" />
-                <span className="sr-only">Facebook</span>
+              <a href="https://www.facebook.com/p/Jacquelines-flower-shop-100072222450453/" target="_blank" rel="noopener noreferrer" aria-label="Follow Jaquelines Flowers on Facebook" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-white focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-secondary">
+                <Facebook className="w-5 h-5" aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -59,11 +57,15 @@ export function Footer() {
               <Clock className="w-5 h-5 text-primary mt-1" />
               <div className="flex flex-col gap-2 w-full">
                 <div className="flex justify-between border-b border-white/10 pb-2">
-                  <span className="text-secondary-foreground/80">Monday - Sunday</span>
-                  <span className="text-white font-medium">8:00 AM – 7:00 PM</span>
+                  <span className="text-secondary-foreground/80">Mon – Sat</span>
+                  <span className="text-white font-medium">8:00 AM – 8:00 PM</span>
+                </div>
+                <div className="flex justify-between border-b border-white/10 pb-2">
+                  <span className="text-secondary-foreground/80">Sunday</span>
+                  <span className="text-white font-medium">9:00 AM – 8:00 PM</span>
                 </div>
                 <p className="text-secondary-foreground/80 text-sm mt-2">
-                  Open 7 days a week. Bilingual service available (English & Spanish).
+                  Open 7 days a week. Bilingual service available (English &amp; Spanish).
                 </p>
               </div>
             </div>

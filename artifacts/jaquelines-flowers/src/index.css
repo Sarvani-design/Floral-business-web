@@ -144,13 +144,30 @@
 @layer base {
   * {
     @apply border-border;
+    /* Prevent text size inflation on iOS landscape */
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
     @apply font-sans antialiased bg-background text-foreground selection:bg-primary/20 selection:text-primary;
     scroll-behavior: smooth;
+    /* iOS momentum scrolling */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent horizontal overflow on mobile */
+    overflow-x: hidden;
   }
-  
+
+  /* Prevent tap highlight flash on iOS */
+  a, button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Smooth font rendering on Apple displays */
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading tracking-tight text-foreground;
   }
@@ -170,6 +187,334 @@
 
 .text-balance {
   text-wrap: balance;
+}
+
+/* Skip to content link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: hsl(15 50% 45%);
+  color: white;
+  padding: 8px 16px;
+  z-index: 9999;
+  border-radius: 0 0 4px 0;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* Suppress Google Translate top banner */
+.goog-te-banner-frame {
+  display: none !important;
+}
+body {
+  top: 0 !important;
+}
+.goog-te-gadget-simple {
+  background: transparent !important;
+  border: none !important;
+  font-size: 0.75rem !important;
+}
+
+/* Custom EN | ES language toggle pill */
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  background: hsl(30 20% 90%);
+  border: 1px solid hsl(30 20% 80%);
+  border-radius: 9999px;
+  padding: 3px;
+  gap: 0;
+}
+.lang-btn {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  padding: 5px 10px;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  color: hsl(24 10% 40%);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+}
+.lang-btn:hover {
+  color: hsl(15 50% 45%);
+}
+.lang-btn--active {
+  background: hsl(15 50% 45%);
+  color: white;
+}
+.lang-btn--active:hover {
+  color: white;
+}
+/* White variant for use over hero image (transparent navbar) */
+.lang-btn--light-inactive {
+  color: rgba(255, 255, 255, 0.8);
+}
+.lang-btn--light-inactive:hover {
+  color: white;
+}
+.lang-divider {
+  width: 1px;
+  height: 14px;
+  background: hsl(30 20% 78%);
+  margin: 0 1px;
+  flex-shrink: 0;
+}
+/* Hide divider when one side is active (pill covers it) */
+.lang-btn--active + .lang-divider,
+.lang-divider + .lang-btn--active {
+  display: none;
+}
+
+/* Phone call floating action button */
+.call-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background-color: hsl(15 50% 45%);
+  color: white;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px hsl(15 50% 45% / 0.45);
+  z-index: 999;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.call-fab:hover,
+.call-fab:focus {
+  width: auto;
+  padding: 0 20px 0 16px;
+  gap: 10px;
+  background-color: hsl(15 55% 38%);
+  box-shadow: 0 6px 24px hsl(15 50% 45% / 0.55);
+  outline: 2px solid hsl(15 50% 45%);
+  outline-offset: 2px;
+}
+.call-fab-label {
+  display: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.call-fab:hover .call-fab-label,
+.call-fab:focus .call-fab-label {
+  display: inline;
+}
+
+/* WhatsApp floating action button */
+.whatsapp-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background-color: #25D366;
+  color: white;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+  z-index: 999;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.whatsapp-fab:hover,
+.whatsapp-fab:focus {
+  width: auto;
+  padding: 0 20px 0 16px;
+  gap: 10px;
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.5);
+  outline: 2px solid #25D366;
+  outline-offset: 2px;
+}
+.whatsapp-fab-label {
+  display: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.whatsapp-fab:hover .whatsapp-fab-label,
+.whatsapp-fab:focus .whatsapp-fab-label {
+  display: inline;
+}
+
+/* Occasion image cards — full-bleed photo with gradient overlay */
+.occasion-img-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  height: 280px;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  background-color: var(--card-accent, hsl(15 50% 45%));
+  padding: 0;
+  text-align: left;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.4s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+.occasion-img-card:hover,
+.occasion-img-card:focus-visible {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+  outline: 3px solid hsl(15 50% 45%);
+  outline-offset: 3px;
+}
+
+.occasion-img-card__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.occasion-img-card:hover .occasion-img-card__photo,
+.occasion-img-card:focus-visible .occasion-img-card__photo {
+  transform: scale(1.08);
+}
+
+.occasion-img-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.78) 0%,
+    rgba(0, 0, 0, 0.35) 45%,
+    rgba(0, 0, 0, 0.08) 100%
+  );
+  transition: background 0.4s ease;
+}
+.occasion-img-card:hover .occasion-img-card__overlay,
+.occasion-img-card:focus-visible .occasion-img-card__overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.45) 50%,
+    rgba(0, 0, 0, 0.12) 100%
+  );
+}
+
+.occasion-img-card__text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.occasion-img-card__label {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.occasion-img-card__sub {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 400;
+  line-height: 1.4;
+  transform: translateY(4px);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.occasion-img-card:hover .occasion-img-card__sub,
+.occasion-img-card:focus-visible .occasion-img-card__sub {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== MOBILE / iOS RESPONSIVE ===== */
+
+/* iOS Safe Area — prevents content hiding behind notch / Dynamic Island / home bar */
+.whatsapp-fab,
+.call-fab {
+  bottom: max(24px, calc(env(safe-area-inset-bottom) + 16px));
+  right: max(24px, calc(env(safe-area-inset-right) + 16px));
+}
+
+/* Ensure header clears iOS status bar on landscape */
+@supports (padding-top: env(safe-area-inset-top)) {
+  header {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Prevent iOS form control override */
+button, input, select, textarea {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Remove iOS tap flash on links and buttons */
+a, button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Minimum 44pt tap targets for nav links (iOS HIG) */
+nav a, nav button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* FABs — icon-only on small phones, expand label on larger */
+@media (max-width: 480px) {
+  .whatsapp-fab:hover .whatsapp-fab-label,
+  .whatsapp-fab:focus .whatsapp-fab-label,
+  .call-fab:hover .call-fab-label,
+  .call-fab:focus .call-fab-label {
+    display: none;
+  }
+  .whatsapp-fab:hover,
+  .whatsapp-fab:focus,
+  .call-fab:hover,
+  .call-fab:focus {
+    width: 56px;
+    padding: 0;
+  }
+}
+
+/* Occasion image cards — slightly shorter on very small phones */
+@media (max-width: 374px) {
+  .occasion-img-card {
+    height: 220px;
+  }
+  .occasion-img-card__label {
+    font-size: 1.15rem;
+  }
+}
+
+/* Map height on mobile */
+@media (max-width: 768px) {
+  .lg\:grid-cols-2 iframe {
+    height: 280px !important;
+  }
 }
 
 /* Organic blobs / noise overlay */

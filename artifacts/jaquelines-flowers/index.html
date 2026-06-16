@@ -2,20 +2,89 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Jaquelines Flowers</title>
-    <meta name="description" content="Jaquelines Flowers — built on Replit. Update this description to reflect the app." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- iOS / Apple PWA meta -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Jaquelines Flowers" />
+    <meta name="theme-color" content="#c4633a" />
+    <title>Jaquelines Flowers — Family Florist in Los Angeles, CA</title>
+    <meta name="description" content="Jaquelines Flowers — family-owned florist at 1130 Firestone Blvd, Los Angeles. Same-day delivery, in-store pick-up, custom bouquets. Open 7 days, 8AM–8PM. Call (323) 585-4647." />
     <meta name="robots" content="index, follow" />
-    <meta property="og:title" content="Jaquelines Flowers" />
-    <meta property="og:description" content="Jaquelines Flowers — built on Replit. Update this description to reflect the app." />
+    <meta property="og:title" content="Jaquelines Flowers — Family Florist in Los Angeles" />
+    <meta property="og:description" content="Family-owned florist in Los Angeles. Same-day delivery, custom bouquets, bilingual service. Open Mon–Sun 8AM–8PM. (323) 585-4647." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Jaquelines Flowers" />
-    <meta name="twitter:description" content="Jaquelines Flowers — built on Replit. Update this description to reflect the app." />
+    <meta name="twitter:title" content="Jaquelines Flowers — Family Florist in Los Angeles" />
+    <meta name="twitter:description" content="Family-owned florist in Los Angeles. Same-day delivery, custom bouquets, bilingual service. Open Mon–Sun 8AM–8PM." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Google Translate -->
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          includedLanguages: 'es,en',
+          layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+          autoDisplay: false
+        }, 'google_translate_element');
+      }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
+
+    <!-- Google Analytics 4 — replace GA_MEASUREMENT_ID with real ID from owner -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+
+    <!-- Local Business Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Florist",
+      "name": "Jaquelines Flowers",
+      "image": "REPLACE_WITH_HERO_IMAGE_URL",
+      "telephone": "+1-323-585-4647",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1130 Firestone Blvd",
+        "addressLocality": "Los Angeles",
+        "addressRegion": "CA",
+        "postalCode": "90001",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 33.9600372,
+        "longitude": -118.2552338
+      },
+      "url": "REPLACE_WITH_WEBSITE_URL",
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+          "opens": "08:00",
+          "closes": "20:00"
+        }
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "reviewCount": "110"
+      },
+      "priceRange": "$$",
+      "sameAs": [
+        "https://www.instagram.com/jacquelinesflowershop/"
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
