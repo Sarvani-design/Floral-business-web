@@ -6,6 +6,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      <LanguageProvider>
       <TooltipProvider>
         {/* GT init target — must exist in DOM but outside all layout containers */}
         <div
@@ -40,6 +42,7 @@ function App() {
         </WouterRouter>
         <Toaster />
       </TooltipProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }
