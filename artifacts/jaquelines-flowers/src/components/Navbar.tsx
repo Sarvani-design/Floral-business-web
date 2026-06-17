@@ -2,38 +2,53 @@ import React from "react";
 import { Phone, MapPin, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLang } from "@/context/LanguageContext";
 
-// Renders the native Google Translate dropdown that GT injects into #google_translate_element
-function GTranslateWidget({ light }: { light?: boolean }) {
-  const ref = React.useRef<HTMLDivElement>(null);
+function LangToggle({ light }: { light?: boolean }) {
+  const { lang, setLang } = useLang();
+  const id = React.useId();
 
-  React.useEffect(() => {
-    const src = document.getElementById("google_translate_element");
-    const gadget = src?.querySelector(".goog-te-gadget");
-    if (gadget && ref.current) {
-      ref.current.appendChild(gadget);
-    }
+  const select = (next: "en" | "es") => {
+    if (next === lang) return;
+    setLang(next);
+  };
 
-    // Poll briefly in case GT hasn't initialised yet
-    let attempts = 0;
-    const timer = setInterval(() => {
-      const g = document.getElementById("google_translate_element")?.querySelector(".goog-te-gadget");
-      if (g && ref.current && !ref.current.contains(g)) {
-        ref.current.appendChild(g);
-        clearInterval(timer);
-      }
-      if (++attempts > 40) clearInterval(timer);
-    }, 200);
+  const trackBg = light
+    ? "bg-white/20 border border-white/30"
+    : "bg-black/15 border border-black/10";
 
-    return () => clearInterval(timer);
-  }, []);
+  const labelClass = (active: boolean) =>
+    `relative z-10 text-xs font-semibold tracking-wider transition-colors duration-200 ${
+      active
+        ? "text-white"
+        : light
+        ? "text-white/70"
+        : "text-foreground/60"
+    }`;
 
   return (
     <div
-      ref={ref}
-      className={`gt-widget-wrap${light ? " gt-widget-wrap--light" : ""}`}
+      role="group"
+      aria-label="Language"
       translate="no"
-    />
+      className={`flex items-center rounded-full p-0.5 select-none cursor-pointer ${trackBg}`}
+      onClick={() => select(lang === "en" ? "es" : "en")}
+    >
+      {(["en", "es"] as const).map((l) => (
+        <div key={l} className="relative flex items-center justify-center px-2.5 py-1 min-w-[32px]">
+          {lang === l && (
+            <motion.div
+              layoutId={`${id}-thumb`}
+              className="absolute inset-0 rounded-full bg-primary shadow-sm"
+              transition={{ type: "spring", stiffness: 500, damping: 35 }}
+            />
+          )}
+          <span className={labelClass(lang === l)}>
+            {l.toUpperCase()}
+          </span>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -85,9 +100,11 @@ export function Navbar() {
                 </a>
               </li>
             ))}
+            <li>
+              <LangToggle light={!isScrolled} />
+            </li>
           </ul>
           <div className="flex items-center gap-4 ml-4 pl-4 border-l border-white/30">
-            <GTranslateWidget light={!isScrolled} />
             <a
               href="tel:+13235854647"
               className={`hidden lg:flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded ${textClass}`}
@@ -103,7 +120,7 @@ export function Navbar() {
 
         {/* Mobile: translate widget + hamburger */}
         <div className="md:hidden flex items-center gap-3">
-          <GTranslateWidget light={!isScrolled} />
+          <LangToggle light={!isScrolled} />
           <button
             className={`p-2 min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg transition-colors ${textClass}`}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

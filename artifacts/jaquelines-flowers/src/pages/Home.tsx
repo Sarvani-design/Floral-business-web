@@ -2,35 +2,10 @@ import React from "react";
 import { motion, type Variants } from "framer-motion";
 import { Star, MapPin, Phone, Heart, ShoppingBag, Truck, MessageCircleHeart, Clock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLang } from "@/context/LanguageContext";
 
 declare function gtag(...args: unknown[]): void;
 
-function TranslateFAB() {
-  const [active, setActive] = React.useState(false);
-
-  const trigger = (toES: boolean, tries = 0) => {
-    const combo = document.querySelector<HTMLSelectElement>(".goog-te-combo");
-    if (combo) {
-      combo.value = toES ? "es" : "";
-      combo.dispatchEvent(new Event("change"));
-    } else if (tries < 15) {
-      setTimeout(() => trigger(toES, tries + 1), 200);
-    }
-  };
-
-  const handleClick = () => {
-    const next = !active;
-    setActive(next);
-    trigger(next);
-  };
-
-  return (
-    <button onClick={handleClick} className="translate-fab" aria-label="Translate page" translate="no">
-      <img src="/google-translate-icon.svg" alt="" aria-hidden="true" width="28" height="28" />
-      <span>{active ? "Ver en English" : "Ver en Español"}</span>
-    </button>
-  );
-}
 
 const PHONE_HREF = "tel:+13235854647";
 
@@ -52,50 +27,202 @@ const staggerContainer: Variants = {
 const PEXELS = (id: number, w = 600, h = 700) =>
   `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}&h=${h}&fit=crop`;
 
-const occasions = [
-  {
-    id: "birthday",
-    label: "Birthday",
-    sub: "Roses, sunflowers & vibrant bouquets",
-    img: PEXELS(3961916),
-    accent: "hsl(340 60% 45%)",
-  },
-  {
-    id: "wedding",
-    label: "Wedding",
-    sub: "Bridal bouquets & ceremony pieces",
-    img: PEXELS(30325205),
-    accent: "hsl(210 30% 40%)",
-  },
-  {
-    id: "sympathy",
-    label: "Sympathy",
-    sub: "Gentle white & soft-tone arrangements",
-    img: PEXELS(8865150),
-    accent: "hsl(210 15% 40%)",
-  },
-  {
-    id: "corporate",
-    label: "Corporate",
-    sub: "Elegant flowers for offices & events",
-    img: PEXELS(1659399),
-    accent: "hsl(150 25% 30%)",
-  },
-  {
-    id: "just-because",
-    label: "Just Because",
-    sub: "Surprise someone with a fresh bouquet",
-    img: PEXELS(37423023),
-    accent: "hsl(30 70% 45%)",
-  },
-  {
-    id: "special-events",
-    label: "Special Events",
-    sub: "Quinceañera, graduation & more",
-    img: PEXELS(28571066),
-    accent: "hsl(320 50% 40%)",
-  },
+const occasionsEN = [
+  { id: "birthday",       label: "Birthday",       sub: "Roses, sunflowers & vibrant bouquets",      img: PEXELS(3961916),   accent: "hsl(340 60% 45%)" },
+  { id: "wedding",        label: "Wedding",         sub: "Bridal bouquets & ceremony pieces",          img: PEXELS(30325205),  accent: "hsl(210 30% 40%)" },
+  { id: "sympathy",       label: "Sympathy",        sub: "Gentle white & soft-tone arrangements",      img: PEXELS(8865150),   accent: "hsl(210 15% 40%)" },
+  { id: "corporate",      label: "Corporate",       sub: "Elegant flowers for offices & events",        img: PEXELS(1659399),   accent: "hsl(150 25% 30%)" },
+  { id: "just-because",   label: "Just Because",    sub: "Surprise someone with a fresh bouquet",       img: PEXELS(37423023),  accent: "hsl(30 70% 45%)"  },
+  { id: "special-events", label: "Special Events",  sub: "Quinceañera, graduation & more",              img: PEXELS(28571066),  accent: "hsl(320 50% 40%)" },
 ];
+
+const occasionsES = [
+  { id: "birthday",       label: "Cumpleaños",      sub: "Rosas, girasoles y ramos vibrantes",         img: PEXELS(3961916),   accent: "hsl(340 60% 45%)" },
+  { id: "wedding",        label: "Boda",            sub: "Ramos nupciales y piezas para ceremonia",    img: PEXELS(30325205),  accent: "hsl(210 30% 40%)" },
+  { id: "sympathy",       label: "Condolencias",    sub: "Arreglos suaves en tonos blancos y tenues",  img: PEXELS(8865150),   accent: "hsl(210 15% 40%)" },
+  { id: "corporate",      label: "Empresarial",     sub: "Flores elegantes para oficinas y eventos",   img: PEXELS(1659399),   accent: "hsl(150 25% 30%)" },
+  { id: "just-because",   label: "Sin Razón",       sub: "Sorprende a alguien con un ramo fresco",     img: PEXELS(37423023),  accent: "hsl(30 70% 45%)"  },
+  { id: "special-events", label: "Eventos Especiales", sub: "Quinceañera, graduación y más",           img: PEXELS(28571066),  accent: "hsl(320 50% 40%)" },
+];
+
+const content = {
+  en: {
+    hero: {
+      badge: "✓ Same-Day Delivery Available in Los Angeles",
+      rating: "5.0 Rated Florist in LA",
+      h1Line1: "Where Los Angeles",
+      h1Accent: "blooms.",
+      body: "A family-owned flower shop pouring love into every arrangement. Fresh, stunning, and handmade for your most important moments.",
+      cta1: "Visit the Shop",
+      cta2: "Call for Delivery",
+      hours: "Mon–Sat 8AM–8PM · Sun 9AM–8PM",
+    },
+    services: {
+      s1Title: "In-store Shopping",
+      s1Body: "Browse our fresh daily selections.",
+      s2Title: "In-store Pick-up",
+      s2Body: "Order ahead, grab & go.",
+      s3Title: "Local Delivery",
+      s3Body: "Same-day delivery across Los Angeles.",
+    },
+    occasions: {
+      eyebrow: "We're here for every moment",
+      h2: "What's the",
+      h2Accent: "occasion?",
+      ctaNote: "Ready to order? We'll take care of the rest.",
+      ctaBtn: "Call (323) 585-4647",
+    },
+    about: {
+      eyebrow: "Our Story",
+      h2: "Born from",
+      h2Accent: "family love.",
+      p1: "Jaquelines Flowers is the flower shop that turns Los Angeles mornings into moments. We are a proudly family-owned and bilingual (English & Spanish) florist dedicated to our community.",
+      p2: "Neighborhood regulars, last-minute romantics, grieving families, and event planners all trust us for one simple reason: our flowers are stunningly fresh, and we genuinely care about the stories they tell.",
+      p3: "We don't just sell flowers; we handcraft expressions of love, sympathy, celebration, and gratitude.",
+      bilingualLabel: "Hablamos Español",
+      bilingualSub: "Bilingual Service",
+      floatingReview: `"The family who runs the shop is very welcoming and nice and bilingual. Love the flowers thank you!"`,
+      floatingReviewAuthor: "— Corazon Tovar",
+    },
+    gallery: {
+      eyebrow: "Fresh Daily",
+      h2: "Stunning arrangements,",
+      h2Accent: "flawless execution.",
+      img1: "Elegant Lilies",
+      img2: "Vibrant Spring",
+      img3: "Classic Romance",
+    },
+    reviews: {
+      h2: "Loved by 115+",
+      h2Accent: "happy customers.",
+      ratingLabel: "5.0 Rating",
+      ratingSource: "on Google Reviews",
+      r1: `"Photos don't do the bouquet I got here justice. These are the most stunning flowers I've bought ever. My first time here & now I know where to go when I want flowers."`,
+      r1Author: "— Corazon Tovar",
+      r1AuthorSub: "(Local Guide)",
+      r2: `"The best delivery service in LA. I placed a last-minute phone order for local delivery while out of state, and it was executed flawlessly. Thank you for creating smile-worthy bouquets!"`,
+      r2Author: "— Luz Sánchez",
+      r3: `"It was a really great experience. The young lady was outgoing, friendly, and very helpful. I bought white Lilies for a friend."`,
+      r3Author: "— Michael",
+      r4: `"Service excellent and the flowers and arrangement are of good taste and quality."`,
+      r4Author: "— Google Review",
+      r5: `"My favorite flower shop...very clean & great prices. Great customer service."`,
+      r5Author: "— Google Review",
+      r6: `"This location is the best flower place ever."`,
+      r6Author: "— Google Review",
+    },
+    contact: {
+      eyebrow: "Visit Us",
+      h2: "Ready to make someone's",
+      h2Accent: "day?",
+      locationTitle: "Location",
+      locationAddress: "1130 Firestone Blvd\nLos Angeles, CA 90001",
+      directions: "Get Directions",
+      phoneTitle: "Call to Order",
+      phoneBody: "Need a last-minute delivery or a custom bouquet? Give us a call.",
+      hoursTitle: "Hours",
+      monSat: "Mon – Sat",
+      monSatHours: "8:00 AM – 8:00 PM",
+      sunday: "Sunday",
+      sundayHours: "9:00 AM – 8:00 PM",
+    },
+    cta: {
+      h2: "Let's create something",
+      h2Accent: "beautiful.",
+      body: "Whether it's a grand event or a simple \"thinking of you\", we have the perfect flowers ready.",
+      btn: "Order Now",
+    },
+    fabLabel: "Call to Order",
+  },
+  es: {
+    hero: {
+      badge: "✓ Entrega el mismo día disponible en Los Ángeles",
+      rating: "Florería con calificación 5.0 en LA",
+      h1Line1: "Donde Los Ángeles",
+      h1Accent: "florece.",
+      body: "Una florería familiar que pone amor en cada arreglo. Fresco, hermoso y hecho a mano para tus momentos más importantes.",
+      cta1: "Visítanos",
+      cta2: "Llama para entrega",
+      hours: "Lun–Sáb 8AM–8PM · Dom 9AM–8PM",
+    },
+    services: {
+      s1Title: "Compras en tienda",
+      s1Body: "Explora nuestras selecciones frescas del día.",
+      s2Title: "Recogida en tienda",
+      s2Body: "Ordena con anticipación y recoge.",
+      s3Title: "Entrega local",
+      s3Body: "Entrega el mismo día en todo Los Ángeles.",
+    },
+    occasions: {
+      eyebrow: "Estamos aquí para cada momento",
+      h2: "¿Cuál es la",
+      h2Accent: "ocasión?",
+      ctaNote: "¿Listo para ordenar? Nosotros nos encargamos del resto.",
+      ctaBtn: "Llama al (323) 585-4647",
+    },
+    about: {
+      eyebrow: "Nuestra Historia",
+      h2: "Nacida del",
+      h2Accent: "amor familiar.",
+      p1: "Jaquelines Flowers es la florería que convierte las mañanas de Los Ángeles en momentos especiales. Somos una florería orgullosamente familiar y bilingüe (inglés y español) dedicada a nuestra comunidad.",
+      p2: "Vecinos habituales, románticos de última hora, familias en duelo y organizadores de eventos confían en nosotros por una razón: nuestras flores son increíblemente frescas y nos importan las historias que cuentan.",
+      p3: "No solo vendemos flores; creamos a mano expresiones de amor, condolencia, celebración y gratitud.",
+      bilingualLabel: "We Speak English",
+      bilingualSub: "Servicio Bilingüe",
+      floatingReview: `"La familia que atiende la tienda es muy acogedora y amable. ¡Amo las flores, muchas gracias!"`,
+      floatingReviewAuthor: "— Corazon Tovar",
+    },
+    gallery: {
+      eyebrow: "Frescas cada día",
+      h2: "Arreglos impresionantes,",
+      h2Accent: "ejecución impecable.",
+      img1: "Lirios Elegantes",
+      img2: "Primavera Vibrante",
+      img3: "Romance Clásico",
+    },
+    reviews: {
+      h2: "Amados por más de 115",
+      h2Accent: "clientes felices.",
+      ratingLabel: "Calificación 5.0",
+      ratingSource: "en Google Reviews",
+      r1: `"Las fotos no le hacen justicia al ramo que compré aquí. Son las flores más hermosas que he comprado. Es mi primera vez aquí y ya sé dónde volver."`,
+      r1Author: "— Corazon Tovar",
+      r1AuthorSub: "(Guía Local)",
+      r2: `"El mejor servicio de entrega en LA. Hice un pedido de último momento por teléfono desde otro estado y fue ejecutado a la perfección. ¡Gracias por crear ramos que hacen sonreír!"`,
+      r2Author: "— Luz Sánchez",
+      r3: `"Fue una experiencia muy agradable. La señorita fue muy sociable, amable y servicial. Compré lirios blancos para una amiga."`,
+      r3Author: "— Michael",
+      r4: `"Servicio excelente y las flores y arreglos son de muy buen gusto y calidad."`,
+      r4Author: "— Reseña de Google",
+      r5: `"Mi florería favorita... muy limpia y buenos precios. Excelente servicio al cliente."`,
+      r5Author: "— Reseña de Google",
+      r6: `"Esta ubicación es el mejor lugar de flores de todos."`,
+      r6Author: "— Reseña de Google",
+    },
+    contact: {
+      eyebrow: "Visítanos",
+      h2: "¿Listo para alegrar el día",
+      h2Accent: "de alguien?",
+      locationTitle: "Ubicación",
+      locationAddress: "1130 Firestone Blvd\nLos Ángeles, CA 90001",
+      directions: "Cómo llegar",
+      phoneTitle: "Llama para ordenar",
+      phoneBody: "¿Necesitas una entrega de último momento o un ramo personalizado? Llámanos.",
+      hoursTitle: "Horarios",
+      monSat: "Lun – Sáb",
+      monSatHours: "8:00 AM – 8:00 PM",
+      sunday: "Domingo",
+      sundayHours: "9:00 AM – 8:00 PM",
+    },
+    cta: {
+      h2: "Creemos algo",
+      h2Accent: "hermoso.",
+      body: "Ya sea un gran evento o un simple \"estoy pensando en ti\", tenemos las flores perfectas listas.",
+      btn: "Ordenar ahora",
+    },
+    fabLabel: "Llamar para ordenar",
+  },
+};
 
 function handleOccasionClick(id: string) {
   if (typeof gtag !== "undefined") {
@@ -105,6 +232,10 @@ function handleOccasionClick(id: string) {
 }
 
 export default function Home() {
+  const { lang } = useLang();
+  const t = content[lang];
+  const occasions = lang === "es" ? occasionsES : occasionsEN;
+
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden">
       {/* Noise texture overlay for warmth/organic feel */}
@@ -129,32 +260,31 @@ export default function Home() {
             variants={staggerContainer}
             className="max-w-2xl"
           >
-            {/* Same-day delivery badge */}
             <motion.div variants={fadeIn} className="mb-4">
               <span className="inline-flex items-center gap-2 bg-white/15 text-white border border-white/30 rounded-full px-4 py-1.5 text-sm font-medium backdrop-blur-sm">
-                ✓ Same-Day Delivery Available in Los Angeles
+                {t.hero.badge}
               </span>
             </motion.div>
 
             <motion.div variants={fadeIn} className="flex items-center gap-2 mb-6">
               <div className="bg-white/15 text-white px-3 py-1 rounded-full text-sm font-semibold tracking-wider uppercase border border-white/30 flex items-center gap-2 backdrop-blur-sm">
                 <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" aria-hidden="true" />
-                5.0 Rated Florist in LA
+                {t.hero.rating}
               </div>
             </motion.div>
 
             <motion.h1 variants={fadeIn} className="text-4xl sm:text-5xl md:text-7xl font-bold font-heading text-white leading-[1.1] mb-6 text-balance">
-              Where Los Angeles <br/> <span className="text-primary italic font-normal">blooms.</span>
+              {t.hero.h1Line1} <br/> <span className="text-primary italic font-normal">{t.hero.h1Accent}</span>
             </motion.h1>
 
             <motion.p variants={fadeIn} className="text-lg md:text-xl text-white/85 mb-10 max-w-lg leading-relaxed font-body">
-              A family-owned flower shop pouring love into every arrangement. Fresh, stunning, and handmade for your most important moments.
+              {t.hero.body}
             </motion.p>
 
             <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4">
               <Button size="lg" className="rounded-full text-base px-8 py-6 shadow-xl shadow-primary/20 hover:scale-105 transition-transform" asChild>
                 <a href="#contact">
-                  Visit the Shop <MapPin className="ml-2 w-5 h-5" aria-hidden="true" />
+                  {t.hero.cta1} <MapPin className="ml-2 w-5 h-5" aria-hidden="true" />
                 </a>
               </Button>
               <Button size="lg" variant="outline" className="rounded-full text-base px-8 py-6 bg-white/50 backdrop-blur-sm border-border hover:bg-white/80 transition-all" asChild>
@@ -162,16 +292,11 @@ export default function Home() {
                   href="tel:+13235854647"
                   onClick={() => { if (typeof gtag !== "undefined") gtag("event", "click", { event_category: "contact", event_label: "phone_call" }); }}
                 >
-                  Call for Delivery <Phone className="ml-2 w-5 h-5" aria-hidden="true" />
+                  {t.hero.cta2} <Phone className="ml-2 w-5 h-5" aria-hidden="true" />
                 </a>
               </Button>
             </motion.div>
 
-            <motion.div variants={fadeIn} className="mt-5">
-              <TranslateFAB />
-            </motion.div>
-
-            {/* Prominent phone + hours below CTAs */}
             <motion.div variants={fadeIn} className="flex flex-col gap-1 mt-6">
               <a
                 href="tel:+13235854647"
@@ -180,7 +305,7 @@ export default function Home() {
               >
                 <Phone className="w-5 h-5 text-primary" aria-hidden="true" /> (323) 585-4647
               </a>
-              <p className="text-white/70 text-sm">Mon–Sat 8AM–8PM · Sun 9AM–8PM</p>
+              <p className="text-white/70 text-sm">{t.hero.hours}</p>
             </motion.div>
           </motion.div>
         </div>
@@ -195,8 +320,8 @@ export default function Home() {
                 <ShoppingBag className="w-6 h-6" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="font-heading font-bold text-xl mb-1">In-store Shopping</h3>
-                <p className="text-muted-foreground text-sm">Browse our fresh daily selections.</p>
+                <h3 className="font-heading font-bold text-xl mb-1">{t.services.s1Title}</h3>
+                <p className="text-muted-foreground text-sm">{t.services.s1Body}</p>
               </div>
             </div>
             <div className="flex items-center gap-4 md:justify-center py-4 md:py-0">
@@ -204,8 +329,8 @@ export default function Home() {
                 <Heart className="w-6 h-6" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="font-heading font-bold text-xl mb-1">In-store Pick-up</h3>
-                <p className="text-muted-foreground text-sm">Order ahead, grab &amp; go.</p>
+                <h3 className="font-heading font-bold text-xl mb-1">{t.services.s2Title}</h3>
+                <p className="text-muted-foreground text-sm">{t.services.s2Body}</p>
               </div>
             </div>
             <div className="flex items-center gap-4 md:justify-center py-4 md:py-0">
@@ -213,8 +338,8 @@ export default function Home() {
                 <Truck className="w-6 h-6" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="font-heading font-bold text-xl mb-1">Local Delivery</h3>
-                <p className="text-muted-foreground text-sm">Same-day delivery across Los Angeles.</p>
+                <h3 className="font-heading font-bold text-xl mb-1">{t.services.s3Title}</h3>
+                <p className="text-muted-foreground text-sm">{t.services.s3Body}</p>
               </div>
             </div>
           </div>
@@ -225,9 +350,9 @@ export default function Home() {
       <section id="occasions" className="py-20 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center max-w-xl mx-auto mb-12">
-            <h2 className="text-primary font-semibold tracking-widest uppercase text-sm mb-4">We're here for every moment</h2>
+            <h2 className="text-primary font-semibold tracking-widest uppercase text-sm mb-4">{t.occasions.eyebrow}</h2>
             <h3 className="text-4xl md:text-5xl font-heading font-bold text-balance">
-              What's the <span className="italic font-normal text-secondary">occasion?</span>
+              {t.occasions.h2} <span className="italic font-normal text-secondary">{t.occasions.h2Accent}</span>
             </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -255,15 +380,14 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Single unified order CTA below the grid */}
           <div className="mt-10 text-center">
-            <p className="text-muted-foreground mb-3 text-sm">Ready to order? We'll take care of the rest.</p>
+            <p className="text-muted-foreground mb-3 text-sm">{t.occasions.ctaNote}</p>
             <a
               href="tel:+13235854647"
               onClick={() => { if (typeof gtag !== "undefined") gtag("event", "click", { event_category: "contact", event_label: "phone_call_occasions" }); }}
               className="inline-flex items-center gap-2 bg-primary text-white font-semibold px-8 py-3 rounded-full shadow-lg shadow-primary/30 hover:bg-primary/90 hover:shadow-xl transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
-              <Phone className="w-5 h-5" aria-hidden="true" /> Call (323) 585-4647
+              <Phone className="w-5 h-5" aria-hidden="true" /> {t.occasions.ctaBtn}
             </a>
           </div>
         </div>
@@ -271,7 +395,6 @@ export default function Home() {
 
       {/* 4. ABOUT / STORY */}
       <section id="about" className="py-24 md:py-32 relative overflow-hidden">
-        {/* Decorative background element */}
         <div className="absolute top-0 right-0 w-1/2 h-full bg-accent/20 rounded-l-[100px] -z-10" />
 
         <div className="container mx-auto px-4 md:px-6">
@@ -286,7 +409,6 @@ export default function Home() {
               <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative z-10">
                 <img src="/about.png" alt="Jaqueline's florist hands carefully arranging fresh roses and lilies" className="w-full h-full object-cover" />
               </div>
-              {/* Floating review card */}
               <motion.div
                 variants={fadeIn}
                 className="absolute -bottom-8 -right-8 md:-right-12 bg-white p-6 rounded-2xl shadow-xl z-20 max-w-[280px] hidden sm:block border border-border"
@@ -297,9 +419,9 @@ export default function Home() {
                   ))}
                 </div>
                 <p className="text-sm font-medium italic text-foreground leading-relaxed">
-                  "The family who runs the shop is very welcoming and nice and bilingual. Love the flowers thank you!"
+                  {t.about.floatingReview}
                 </p>
-                <p className="text-xs text-muted-foreground mt-3 font-semibold uppercase tracking-wider">— Corazon Tovar</p>
+                <p className="text-xs text-muted-foreground mt-3 font-semibold uppercase tracking-wider">{t.about.floatingReviewAuthor}</p>
               </motion.div>
             </motion.div>
 
@@ -309,21 +431,15 @@ export default function Home() {
               viewport={{ once: true, margin: "-100px" }}
               variants={staggerContainer}
             >
-              <motion.h2 variants={fadeIn} className="text-primary font-semibold tracking-widest uppercase text-sm mb-4">Our Story</motion.h2>
+              <motion.h2 variants={fadeIn} className="text-primary font-semibold tracking-widest uppercase text-sm mb-4">{t.about.eyebrow}</motion.h2>
               <motion.h3 variants={fadeIn} className="text-4xl md:text-5xl font-heading font-bold mb-6 leading-tight text-balance">
-                Born from <span className="italic font-normal text-secondary">family love.</span>
+                {t.about.h2} <span className="italic font-normal text-secondary">{t.about.h2Accent}</span>
               </motion.h3>
 
               <motion.div variants={fadeIn} className="space-y-6 text-lg text-foreground/80 font-body">
-                <p>
-                  Jaquelines Flowers is the flower shop that turns Los Angeles mornings into moments. We are a proudly family-owned and bilingual (English &amp; Spanish) florist dedicated to our community.
-                </p>
-                <p>
-                  Neighborhood regulars, last-minute romantics, grieving families, and event planners all trust us for one simple reason: our flowers are stunningly fresh, and we genuinely care about the stories they tell.
-                </p>
-                <p>
-                  We don't just sell flowers; we handcraft expressions of love, sympathy, celebration, and gratitude.
-                </p>
+                <p>{t.about.p1}</p>
+                <p>{t.about.p2}</p>
+                <p>{t.about.p3}</p>
               </motion.div>
 
               <motion.div variants={fadeIn} className="mt-10">
@@ -332,8 +448,8 @@ export default function Home() {
                     <MessageCircleHeart className="w-6 h-6 text-primary" aria-hidden="true" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground uppercase tracking-wider">Hablamos Español</p>
-                    <p className="font-heading text-lg">Bilingual Service</p>
+                    <p className="text-sm text-muted-foreground uppercase tracking-wider">{t.about.bilingualLabel}</p>
+                    <p className="font-heading text-lg">{t.about.bilingualSub}</p>
                   </div>
                 </div>
               </motion.div>
@@ -346,9 +462,9 @@ export default function Home() {
       <section className="py-24 bg-card border-y border-border">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-primary font-semibold tracking-widest uppercase text-sm mb-4">Fresh Daily</h2>
+            <h2 className="text-primary font-semibold tracking-widest uppercase text-sm mb-4">{t.gallery.eyebrow}</h2>
             <h3 className="text-4xl md:text-5xl font-heading font-bold text-balance">
-              Stunning arrangements, <span className="italic font-normal">flawless execution.</span>
+              {t.gallery.h2} <span className="italic font-normal">{t.gallery.h2Accent}</span>
             </h3>
           </div>
 
@@ -364,7 +480,7 @@ export default function Home() {
                 <img src="/bouquet-1.png" alt="Elegant white lily arrangement — available for pick-up or delivery" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
               </div>
-              <h4 className="font-heading font-bold text-xl text-center">Elegant Lilies</h4>
+              <h4 className="font-heading font-bold text-xl text-center">{t.gallery.img1}</h4>
             </motion.div>
 
             <motion.div
@@ -378,7 +494,7 @@ export default function Home() {
                 <img src="/bouquet-2.png" alt="Vibrant spring bouquet with mixed colourful flowers" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
               </div>
-              <h4 className="font-heading font-bold text-xl text-center">Vibrant Spring</h4>
+              <h4 className="font-heading font-bold text-xl text-center">{t.gallery.img2}</h4>
             </motion.div>
 
             <motion.div
@@ -392,7 +508,7 @@ export default function Home() {
                 <img src="/bouquet-3.png" alt="Classic red rose romance bouquet for special occasions" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
               </div>
-              <h4 className="font-heading font-bold text-xl text-center">Classic Romance</h4>
+              <h4 className="font-heading font-bold text-xl text-center">{t.gallery.img3}</h4>
             </motion.div>
           </div>
         </div>
@@ -412,56 +528,44 @@ export default function Home() {
                 ))}
               </div>
               <h3 className="text-4xl md:text-5xl font-heading font-bold text-balance leading-tight">
-                Loved by 115+ <br/> <span className="italic font-normal opacity-90">happy customers.</span>
+                {t.reviews.h2} <br/> <span className="italic font-normal opacity-90">{t.reviews.h2Accent}</span>
               </h3>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-bold font-heading">5.0 Rating</p>
-              <p className="opacity-80">on Google Reviews</p>
+              <p className="text-2xl font-bold font-heading">{t.reviews.ratingLabel}</p>
+              <p className="opacity-80">{t.reviews.ratingSource}</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20">
-              <p className="text-lg italic leading-relaxed mb-6">
-                "Photos don't do the bouquet I got here justice. These are the most stunning flowers I've bought ever. My first time here &amp; now I know where to go when I want flowers."
-              </p>
-              <p className="font-semibold uppercase tracking-wider text-sm">— Corazon Tovar <span className="opacity-70 normal-case font-normal">(Local Guide)</span></p>
+              <p className="text-lg italic leading-relaxed mb-6">{t.reviews.r1}</p>
+              <p className="font-semibold uppercase tracking-wider text-sm">{t.reviews.r1Author} <span className="opacity-70 normal-case font-normal">{t.reviews.r1AuthorSub}</span></p>
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20">
-              <p className="text-lg italic leading-relaxed mb-6">
-                "The best delivery service in LA. I placed a last-minute phone order for local delivery while out of state, and it was executed flawlessly. Thank you for creating smile-worthy bouquets!"
-              </p>
-              <p className="font-semibold uppercase tracking-wider text-sm">— Luz Sánchez</p>
+              <p className="text-lg italic leading-relaxed mb-6">{t.reviews.r2}</p>
+              <p className="font-semibold uppercase tracking-wider text-sm">{t.reviews.r2Author}</p>
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20 md:col-span-2 lg:col-span-1">
-              <p className="text-lg italic leading-relaxed mb-6">
-                "It was a really great experience. The young lady was outgoing, friendly, and very helpful. I bought white Lilies for a friend."
-              </p>
-              <p className="font-semibold uppercase tracking-wider text-sm">— Michael</p>
+              <p className="text-lg italic leading-relaxed mb-6">{t.reviews.r3}</p>
+              <p className="font-semibold uppercase tracking-wider text-sm">{t.reviews.r3Author}</p>
             </div>
 
             <div className="bg-white/5 backdrop-blur-sm p-8 rounded-2xl border border-white/10 hidden md:block">
-              <p className="text-lg italic leading-relaxed mb-6">
-                "Service excellent and the flowers and arrangement are of good taste and quality."
-              </p>
-              <p className="font-semibold uppercase tracking-wider text-sm">— Google Review</p>
+              <p className="text-lg italic leading-relaxed mb-6">{t.reviews.r4}</p>
+              <p className="font-semibold uppercase tracking-wider text-sm">{t.reviews.r4Author}</p>
             </div>
 
             <div className="bg-white/5 backdrop-blur-sm p-8 rounded-2xl border border-white/10 hidden lg:block">
-              <p className="text-lg italic leading-relaxed mb-6">
-                "My favorite flower shop...very clean &amp; great prices. Great customer service."
-              </p>
-              <p className="font-semibold uppercase tracking-wider text-sm">— Google Review</p>
+              <p className="text-lg italic leading-relaxed mb-6">{t.reviews.r5}</p>
+              <p className="font-semibold uppercase tracking-wider text-sm">{t.reviews.r5Author}</p>
             </div>
 
             <div className="bg-white/5 backdrop-blur-sm p-8 rounded-2xl border border-white/10 hidden lg:block">
-              <p className="text-lg italic leading-relaxed mb-6">
-                "This location is the best flower place ever."
-              </p>
-              <p className="font-semibold uppercase tracking-wider text-sm">— Google Review</p>
+              <p className="text-lg italic leading-relaxed mb-6">{t.reviews.r6}</p>
+              <p className="font-semibold uppercase tracking-wider text-sm">{t.reviews.r6Author}</p>
             </div>
           </div>
         </div>
@@ -472,9 +576,9 @@ export default function Home() {
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-primary font-semibold tracking-widest uppercase text-sm mb-4">Visit Us</h2>
+              <h2 className="text-primary font-semibold tracking-widest uppercase text-sm mb-4">{t.contact.eyebrow}</h2>
               <h3 className="text-4xl md:text-5xl font-heading font-bold mb-8">
-                Ready to make someone's <span className="italic font-normal text-secondary">day?</span>
+                {t.contact.h2} <span className="italic font-normal text-secondary">{t.contact.h2Accent}</span>
               </h3>
 
               <div className="space-y-8">
@@ -483,13 +587,10 @@ export default function Home() {
                     <MapPin className="w-6 h-6 text-primary" aria-hidden="true" />
                   </div>
                   <div>
-                    <h4 className="font-heading font-bold text-xl mb-2">Location</h4>
-                    <p className="text-foreground/80 text-lg mb-2">
-                      1130 Firestone Blvd<br />
-                      Los Angeles, CA 90001
-                    </p>
+                    <h4 className="font-heading font-bold text-xl mb-2">{t.contact.locationTitle}</h4>
+                    <p className="text-foreground/80 text-lg mb-2 whitespace-pre-line">{t.contact.locationAddress}</p>
                     <a href="https://maps.app.goo.gl/8g5Zv4fXuG7PAd59A" target="_blank" rel="noopener noreferrer" className="text-primary font-semibold flex items-center gap-1 hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded w-fit">
-                      Get Directions <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                      {t.contact.directions} <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </a>
                   </div>
                 </div>
@@ -499,10 +600,8 @@ export default function Home() {
                     <Phone className="w-6 h-6 text-primary" aria-hidden="true" />
                   </div>
                   <div>
-                    <h4 className="font-heading font-bold text-xl mb-2">Call to Order</h4>
-                    <p className="text-foreground/80 text-lg mb-2">
-                      Need a last-minute delivery or a custom bouquet? Give us a call.
-                    </p>
+                    <h4 className="font-heading font-bold text-xl mb-2">{t.contact.phoneTitle}</h4>
+                    <p className="text-foreground/80 text-lg mb-2">{t.contact.phoneBody}</p>
                     <a
                       href="tel:+13235854647"
                       onClick={() => { if (typeof gtag !== "undefined") gtag("event", "click", { event_category: "contact", event_label: "phone_call" }); }}
@@ -518,15 +617,15 @@ export default function Home() {
                     <Clock className="w-6 h-6 text-primary" aria-hidden="true" />
                   </div>
                   <div>
-                    <h4 className="font-heading font-bold text-xl mb-2">Hours</h4>
+                    <h4 className="font-heading font-bold text-xl mb-2">{t.contact.hoursTitle}</h4>
                     <ul className="text-foreground/80 text-lg space-y-2">
                       <li className="flex justify-between w-72 border-b border-border pb-1">
-                        <span>Mon – Sat</span>
-                        <span className="font-medium">8:00 AM – 8:00 PM</span>
+                        <span>{t.contact.monSat}</span>
+                        <span className="font-medium">{t.contact.monSatHours}</span>
                       </li>
                       <li className="flex justify-between w-72 border-b border-border pb-1">
-                        <span>Sunday</span>
-                        <span className="font-medium">9:00 AM – 8:00 PM</span>
+                        <span>{t.contact.sunday}</span>
+                        <span className="font-medium">{t.contact.sundayHours}</span>
                       </li>
                     </ul>
                   </div>
@@ -554,10 +653,10 @@ export default function Home() {
       <section className="py-24 bg-accent/30 text-center relative overflow-hidden">
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <h2 className="text-4xl md:text-6xl font-heading font-bold text-foreground mb-6">
-            Let's create something <span className="italic text-primary font-normal">beautiful.</span>
+            {t.cta.h2} <span className="italic text-primary font-normal">{t.cta.h2Accent}</span>
           </h2>
           <p className="text-xl text-foreground/70 mb-10 max-w-2xl mx-auto">
-            Whether it's a grand event or a simple "thinking of you", we have the perfect flowers ready.
+            {t.cta.body}
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button size="lg" className="rounded-full text-lg px-10 py-7 shadow-xl shadow-primary/20 hover:scale-105 transition-transform" asChild>
@@ -565,7 +664,7 @@ export default function Home() {
                 href="tel:+13235854647"
                 onClick={() => { if (typeof gtag !== "undefined") gtag("event", "click", { event_category: "contact", event_label: "phone_call" }); }}
               >
-                <Phone className="mr-2 w-5 h-5" aria-hidden="true" /> Order Now
+                <Phone className="mr-2 w-5 h-5" aria-hidden="true" /> {t.cta.btn}
               </a>
             </Button>
           </div>
@@ -580,7 +679,7 @@ export default function Home() {
         onClick={() => { if (typeof gtag !== "undefined") gtag("event", "click", { event_category: "contact", event_label: "phone_call_fab" }); }}
       >
         <Phone className="w-6 h-6" aria-hidden="true" />
-        <span className="call-fab-label">Call to Order</span>
+        <span className="call-fab-label">{t.fabLabel}</span>
       </a>
     </div>
   );
