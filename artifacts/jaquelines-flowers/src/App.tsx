@@ -22,6 +22,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        {/* GT init target — must exist in DOM but outside all layout containers */}
+        <div
+          id="google_translate_element"
+          aria-hidden="true"
+          style={{ position: "fixed", top: "-9999px", left: "-9999px", width: "1px", height: "1px", overflow: "hidden" }}
+        />
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
           <div className="min-h-screen flex flex-col">
             <a href="#main-content" className="skip-link">Skip to main content</a>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Blue speech bubble (top-left) -->
+  <rect x="2" y="2" width="36" height="30" rx="5" ry="5" fill="#4285F4"/>
+  <polygon points="2,32 14,32 8,42" fill="#4285F4"/>
+  <!-- "G" in white -->
+  <text x="20" y="24" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" font-weight="bold" fill="white">G</text>
+  <!-- Gray speech bubble (bottom-right) -->
+  <rect x="26" y="30" width="36" height="30" rx="5" ry="5" fill="#9E9E9E"/>
+  <polygon points="62,60 50,60 56,70" fill="#9E9E9E"/>
+  <!-- "文" in white -->
+  <text x="44" y="51" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="white">文</text>
+</svg>
