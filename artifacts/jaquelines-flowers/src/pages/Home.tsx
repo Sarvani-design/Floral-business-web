@@ -5,6 +5,33 @@ import { Button } from "@/components/ui/button";
 
 declare function gtag(...args: unknown[]): void;
 
+function TranslateFAB() {
+  const [active, setActive] = React.useState(false);
+
+  const trigger = (toES: boolean, tries = 0) => {
+    const combo = document.querySelector<HTMLSelectElement>(".goog-te-combo");
+    if (combo) {
+      combo.value = toES ? "es" : "";
+      combo.dispatchEvent(new Event("change"));
+    } else if (tries < 15) {
+      setTimeout(() => trigger(toES, tries + 1), 200);
+    }
+  };
+
+  const handleClick = () => {
+    const next = !active;
+    setActive(next);
+    trigger(next);
+  };
+
+  return (
+    <button onClick={handleClick} className="translate-fab" aria-label="Translate page" translate="no">
+      <img src="/google-translate-icon.svg" alt="" aria-hidden="true" width="28" height="28" />
+      <span>{active ? "Ver en English" : "Ver en Español"}</span>
+    </button>
+  );
+}
+
 const PHONE_HREF = "tel:+13235854647";
 
 const fadeIn: Variants = {
@@ -138,6 +165,10 @@ export default function Home() {
                   Call for Delivery <Phone className="ml-2 w-5 h-5" aria-hidden="true" />
                 </a>
               </Button>
+            </motion.div>
+
+            <motion.div variants={fadeIn} className="mt-5">
+              <TranslateFAB />
             </motion.div>
 
             {/* Prominent phone + hours below CTAs */}

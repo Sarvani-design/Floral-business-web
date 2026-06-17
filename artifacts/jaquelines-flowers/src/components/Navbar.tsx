@@ -3,49 +3,37 @@ import { Phone, MapPin, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Sliding pill toggle — EN left, ES right, glider slides between them
-function LangToggle({ light }: { light?: boolean }) {
-  const [isES, setIsES] = React.useState(() => {
-    if (typeof document === "undefined") return false;
-    return document.cookie.includes("googtrans=/en/es");
-  });
+// Renders the native Google Translate dropdown that GT injects into #google_translate_element
+function GTranslateWidget({ light }: { light?: boolean }) {
+  const ref = React.useRef<HTMLDivElement>(null);
 
-  const handleToggle = () => {
-    const next = !isES;
-    setIsES(next);
-
-    if (next) {
-      // Switch to Spanish — retry until goog-te-combo is ready
-      const attempt = (tries = 0) => {
-        const combo = document.querySelector<HTMLSelectElement>(".goog-te-combo");
-        if (combo) {
-          combo.value = "es";
-          combo.dispatchEvent(new Event("change"));
-        } else if (tries < 25) {
-          setTimeout(() => attempt(tries + 1), 250);
-        }
-      };
-      attempt();
-    } else {
-      // Restore English — clear googtrans cookie and reload
-      const exp = "expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-      document.cookie = `googtrans=; ${exp}`;
-      document.cookie = `googtrans=; ${exp}; domain=.${location.hostname}`;
-      window.location.reload();
+  React.useEffect(() => {
+    const src = document.getElementById("google_translate_element");
+    const gadget = src?.querySelector(".goog-te-gadget");
+    if (gadget && ref.current) {
+      ref.current.appendChild(gadget);
     }
-  };
+
+    // Poll briefly in case GT hasn't initialised yet
+    let attempts = 0;
+    const timer = setInterval(() => {
+      const g = document.getElementById("google_translate_element")?.querySelector(".goog-te-gadget");
+      if (g && ref.current && !ref.current.contains(g)) {
+        ref.current.appendChild(g);
+        clearInterval(timer);
+      }
+      if (++attempts > 40) clearInterval(timer);
+    }, 200);
+
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <button
-      className={`lang-switch${isES ? " lang-switch--es" : ""}${light ? " lang-switch--light" : ""}`}
-      onClick={handleToggle}
-      aria-label={isES ? "Cambiar a Inglés" : "Switch to Spanish"}
-      title={isES ? "Switch to English" : "Cambiar a Español"}
-    >
-      <span className="lang-switch__glider" aria-hidden="true" />
-      <span className={`lang-switch__label${!isES ? " lang-switch__label--active" : ""}`}>EN</span>
-      <span className={`lang-switch__label${isES ? " lang-switch__label--active" : ""}`}>ES</span>
-    </button>
+    <div
+      ref={ref}
+      className={`gt-widget-wrap${light ? " gt-widget-wrap--light" : ""}`}
+      translate="no"
+    />
   );
 }
 
@@ -73,16 +61,10 @@ export function Navbar() {
   return (
     <header
       className={`fixed top-0 w-full z-40 transition-all duration-500 ${
-        isScrolled ? "glass-nav py-3" : "bg-black/20 backdrop-blur-sm py-5"
+        isScrolled ? "glass-nav" : "bg-black/20 backdrop-blur-sm"
       }`}
+      style={{ paddingTop: "28px", paddingBottom: "20px" }}
     >
-      {/* Hidden Google Translate init target — zero-size, stays in DOM for script */}
-      <div
-        id="google_translate_element"
-        aria-hidden="true"
-        style={{ position: "absolute", width: 0, height: 0, overflow: "hidden", opacity: 0, pointerEvents: "none" }}
-      />
-
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
         <a href="#home" className="flex items-center gap-2 group">
           <span className={`font-heading text-2xl font-bold tracking-tight transition-colors group-hover:opacity-80 ${logoClass}`}>
@@ -105,7 +87,7 @@ export function Navbar() {
             ))}
           </ul>
           <div className="flex items-center gap-4 ml-4 pl-4 border-l border-white/30">
-            <LangToggle light={!isScrolled} />
+            <GTranslateWidget light={!isScrolled} />
             <a
               href="tel:+13235854647"
               className={`hidden lg:flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded ${textClass}`}
@@ -119,9 +101,9 @@ export function Navbar() {
           </div>
         </nav>
 
-        {/* Mobile: language toggle + hamburger */}
+        {/* Mobile: translate widget + hamburger */}
         <div className="md:hidden flex items-center gap-3">
-          <LangToggle light={!isScrolled} />
+          <GTranslateWidget light={!isScrolled} />
           <button
             className={`p-2 min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg transition-colors ${textClass}`}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

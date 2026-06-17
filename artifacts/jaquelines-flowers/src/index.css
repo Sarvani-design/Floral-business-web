@@ -209,12 +209,26 @@
   outline-offset: 2px;
 }
 
-/* Suppress Google Translate top banner */
-.goog-te-banner-frame {
+/* Suppress Google Translate top banner and all layout side-effects */
+.goog-te-banner-frame,
+.goog-te-balloon-frame,
+.goog-te-ftab-link,
+.goog-te-gadget-icon,
+.goog-te-ftab,
+.goog-te-spinner-pos,
+#goog-gt-tt,
+.goog-tooltip,
+.goog-tooltip-content {
   display: none !important;
+  visibility: hidden !important;
 }
+/* GT sets body.top to a negative offset for its banner — always reset */
 body {
   top: 0 !important;
+  position: static !important;
+}
+html body {
+  margin-top: 0 !important;
 }
 .goog-te-gadget-simple {
   background: transparent !important;
@@ -222,71 +236,71 @@ body {
   font-size: 0.75rem !important;
 }
 
-/* ── Sliding EN / ES pill toggle ── */
-.lang-switch {
-  position: relative;
+/* ── Google Translate native dropdown in navbar ── */
+.gt-widget-wrap .goog-te-gadget {
+  font-family: inherit !important;
+  font-size: 0 !important; /* hide "Powered by Google" text */
+  color: transparent !important;
+}
+.gt-widget-wrap .goog-te-gadget a {
+  display: none !important; /* hide the branding link */
+}
+.gt-widget-wrap .goog-te-combo {
+  appearance: auto;
+  background: rgba(0, 0, 0, 0.28) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 8px !important;
+  color: #ffffff !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  padding: 6px 10px !important;
+  cursor: pointer;
+  outline: none !important;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.gt-widget-wrap .goog-te-combo:hover {
+  background: rgba(0, 0, 0, 0.45) !important;
+  border-color: rgba(255, 255, 255, 0.55) !important;
+}
+.gt-widget-wrap--light .goog-te-combo {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+.gt-widget-wrap--light .goog-te-combo:hover {
+  background: rgba(255, 255, 255, 0.32) !important;
+}
+
+/* ── Hero translate pill button ── */
+.translate-fab {
   display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  width: 86px;
-  height: 38px;
-  background-color: hsl(30 20% 86%);
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  padding: 0;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.10), 0 2px 4px rgba(0,0,0,0.06);
-  overflow: hidden;
-  flex-shrink: 0;
-  transition: background 0.3s ease;
-}
-.lang-switch--light {
-  background-color: rgba(255, 255, 255, 0.18);
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.12);
-}
-
-/* Sliding indicator */
-.lang-switch__glider {
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 37px;
-  height: 30px;
-  background-color: hsl(15 50% 45%);
-  border-radius: 40px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.22);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1;
-}
-/* Move glider to ES side: (86 - 37 - 4) - 4 = 41px */
-.lang-switch--es .lang-switch__glider {
-  transform: translateX(41px);
-}
-
-/* Labels */
-.lang-switch__label {
-  flex: 1;
-  text-align: center;
-  font-weight: 700;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  color: hsl(24 10% 45%);
-  z-index: 2;
-  transition: color 0.3s ease;
-  user-select: none;
-  pointer-events: none;
-  line-height: 1;
-}
-.lang-switch--light .lang-switch__label {
-  color: rgba(255, 255, 255, 0.7);
-}
-.lang-switch__label--active {
+  gap: 9px;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255, 255, 255, 0.38);
+  border-radius: 100px;
+  padding: 9px 20px 9px 10px;
   color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease, border-color 0.2s ease;
+  white-space: nowrap;
 }
-/* Focus ring */
-.lang-switch:focus-visible {
-  outline: 2px solid hsl(15 50% 45%);
+.translate-fab:hover {
+  background: rgba(255, 255, 255, 0.26);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px);
+}
+.translate-fab:focus-visible {
+  outline: 2px solid white;
   outline-offset: 3px;
+}
+.translate-fab img {
+  flex-shrink: 0;
+  border-radius: 4px;
 }
 
 /* Phone call floating action button */
