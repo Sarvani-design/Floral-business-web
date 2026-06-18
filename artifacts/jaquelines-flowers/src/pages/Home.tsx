@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import { Star, MapPin, Phone, Heart, ShoppingBag, Truck, MessageCircleHeart, Clock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -228,13 +228,13 @@ function handleOccasionClick(id: string) {
   if (typeof gtag !== "undefined") {
     gtag("event", "click", { event_category: "engagement", event_label: `occasion_${id}` });
   }
-  window.location.href = PHONE_HREF;
 }
 
 export default function Home() {
   const { lang } = useLang();
   const t = content[lang];
   const occasions = lang === "es" ? occasionsES : occasionsEN;
+  const [selectedOccasion, setSelectedOccasion] = useState<string | null>(null);
 
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden">
@@ -359,10 +359,11 @@ export default function Home() {
             {occasions.map((o) => (
               <button
                 key={o.id}
-                onClick={() => handleOccasionClick(o.id)}
-                className="occasion-img-card"
+                onClick={() => { handleOccasionClick(o.id); setSelectedOccasion(o.id); }}
+                className={`occasion-img-card ${selectedOccasion === o.id ? "occasion-img-card--selected" : ""}`}
                 style={{ "--card-accent": o.accent } as React.CSSProperties}
-                aria-label={`Order ${o.label} flowers — call Jaquelines Flowers`}
+                aria-label={`Highlight ${o.label} flowers`}
+                aria-pressed={selectedOccasion === o.id}
               >
                 <img
                   src={o.img}
